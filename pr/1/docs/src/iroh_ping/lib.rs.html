@@ -142,8 +142,19 @@
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
-<a href="#144" id="144">144</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
-<span class="kw">use </span>std::time::{Duration, Instant};
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
 <span class="kw">use </span>iroh::{
     Endpoint, NodeAddr,
@@ -163,6 +174,12 @@
 </span><span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>Ping {
     metrics: Arc&lt;Metrics&gt;,
+}
+
+<span class="kw">impl </span>Default <span class="kw">for </span>Ping {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new()
+    }
 }
 
 <span class="kw">impl </span>Ping {
@@ -269,8 +286,9 @@
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span>iroh::{Endpoint, Watcher, protocol::Router};
+
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>test_ping() -&gt; anyhow::Result&lt;()&gt; {
@@ -281,7 +299,7 @@
         <span class="kw">let </span>client = Endpoint::builder().discovery_n0().bind().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>ping_client = Ping::new();
         <span class="kw">let </span>res = ping_client.ping(<span class="kw-2">&amp;</span>client, addr.clone()).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="macro">println!</span>(<span class="string">"ping response: {:?}"</span>, res);
+        <span class="macro">println!</span>(<span class="string">"ping response: {res:?}"</span>);
 
         <span class="prelude-val">Ok</span>(())
     }
