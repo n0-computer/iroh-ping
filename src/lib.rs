@@ -61,24 +61,13 @@ impl Ping {
         let response = recv.read_to_end(4).await?;
         assert_eq!(&response, b"PONG");
 
-        // Explicitly close the whole connection.
-        conn.close(0u32.into(), b"bye!");
-
-        // The above call only queues a close message to be sent (see how it's not async!).
-        // We need to actually call this to make sure this message is sent out.
-        endpoint.close().await;
-
         // at this point we've successfully pinged, mark the metric
         self.metrics.pings_sent.inc();
 
-        // If we don't call this, but continue using the endpoint, we then the queued
-        // close call will eventually be picked up and sent.
-        // But always try to wait for endpoint.close().await to go through before dropping
-        // the endpoint to ensure any queued messages are sent through and connections are
-        // closed gracefully.
-        Ok(Duration::from_millis(
-            Instant::now().duration_since(start).as_millis() as u64,
-        ))
+        // Explicitly close the whole connection.
+        conn.close(0u32.into(), b"bye!");
+
+        Ok(start.elapsed())
     }
 }
 
@@ -110,12 +99,12 @@ impl ProtocolHandler for Ping {
         // further, which makes the receive stream on the other end terminate.
         send.finish()?;
 
+        // increment count of pings we've received
+        metrics.pings_recv.inc();
+
         // Wait until the remote closes the connection, which it does once it
         // received the response.
         connection.closed().await;
-
-        // increment count of pings we've received
-        metrics.pings_recv.inc();
 
         Ok(())
     }
@@ -133,20 +122,41 @@ pub struct Metrics {
 
 #[cfg(test)]
 mod tests {
+    use anyhow::Result;
     use iroh::{protocol::Router, Endpoint, Watcher};
 
     use super::*;
 
     #[tokio::test]
-    async fn test_ping() -> anyhow::Result<()> {
-        let ep = Endpoint::builder().discovery_n0().bind().await?;
-        let router = Router::builder(ep).accept(ALPN, Ping::new()).spawn();
-        let addr = router.endpoint().node_addr().initialized().await?;
+    async fn test_ping() -> Result<()> {
+        let server_endpoint = Endpoint::builder().discovery_n0().bind().await?;
+        let server_ping = Ping::new();
+        let server_metrics = server_ping.metrics().clone();
+        let server_router = Router::builder(server_endpoint)
+            .accept(ALPN, server_ping)
+            .spawn();
+        let server_addr = server_router.endpoint().node_addr().initialized().await?;
 
-        let client = Endpoint::builder().discovery_n0().bind().await?;
-        let ping_client = Ping::new();
-        let res = ping_client.ping(&client, addr.clone()).await?;
+        let client_endpoint = Endpoint::builder().discovery_n0().bind().await?;
+        let client_ping = Ping::new();
+        let client_metrics = client_ping.metrics().clone();
+
+        let res = client_ping
+            .ping(&client_endpoint, server_addr.clone())
+            .await?;
         println!("ping response: {res:?}");
+        assert_eq!(server_metrics.pings_recv.get(), 1);
+        assert_eq!(client_metrics.pings_sent.get(), 1);
+
+        let res = client_ping
+            .ping(&client_endpoint, server_addr.clone())
+            .await?;
+        println!("ping response: {res:?}");
+        assert_eq!(server_metrics.pings_recv.get(), 2);
+        assert_eq!(client_metrics.pings_sent.get(), 2);
+
+        client_endpoint.close().await;
+        server_router.shutdown().await?;
 
         Ok(())
     }
