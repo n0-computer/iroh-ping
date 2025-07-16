@@ -16,8 +16,13 @@ use iroh_metrics::{Counter, MetricsGroup};
 /// and the connection is aborted unless both nodes pass the same bytestring.
 pub const ALPN: &[u8] = b"iroh/ping/0";
 
-/// Ping is a struct that holds both the client ping method, and the endpoint
-/// protocol implementation
+/// Ping is our protocol struct.
+///
+/// We'll implement [`ProtocolHandler`] on this struct so we can use it with
+/// an [`iroh::protocol::Router`].
+/// It's also fine to keep state in this struct for use across many incoming
+/// connections, in this case we'll keep metrics about the amount of pings we
+/// sent or received.
 #[derive(Debug, Clone)]
 pub struct Ping {
     metrics: Arc<Metrics>,
@@ -30,27 +35,27 @@ impl Default for Ping {
 }
 
 impl Ping {
-    /// create a new Ping
+    /// Creates new ping state.
     pub fn new() -> Self {
         Self {
             metrics: Arc::new(Metrics::default()),
         }
     }
 
-    /// handle to ping metrics
+    /// Returns a handle to ping metrics.
     pub fn metrics(&self) -> &Arc<Metrics> {
         &self.metrics
     }
 
-    /// send a ping on the provided endpoint to a given node address
+    /// Sends a ping on the provided endpoint to a given node address.
     pub async fn ping(&self, endpoint: &Endpoint, addr: NodeAddr) -> anyhow::Result<Duration> {
-        let start = Instant::now();
         // Open a connection to the accepting node
         let conn = endpoint.connect(addr, ALPN).await?;
 
         // Open a bidirectional QUIC stream
         let (mut send, mut recv) = conn.open_bi().await?;
 
+        let start = Instant::now();
         // Send some data to be pinged
         send.write_all(b"PING").await?;
 
@@ -61,13 +66,16 @@ impl Ping {
         let response = recv.read_to_end(4).await?;
         assert_eq!(&response, b"PONG");
 
+        let ping = start.elapsed();
+
         // at this point we've successfully pinged, mark the metric
         self.metrics.pings_sent.inc();
 
-        // Explicitly close the whole connection.
+        // Explicitly close the whole connection, as we're the last ones to receive data
+        // and know there's nothing else more to do in the connection.
         conn.close(0u32.into(), b"bye!");
 
-        Ok(start.elapsed())
+        Ok(ping)
     }
 }
 
@@ -90,6 +98,9 @@ impl ProtocolHandler for Ping {
         let req = recv.read_to_end(4).await.map_err(AcceptError::from_err)?;
         assert_eq!(&req, b"PING");
 
+        // increment count of pings we've received
+        metrics.pings_recv.inc();
+
         // send back "PONG" bytes
         send.write_all(b"PONG")
             .await
@@ -98,9 +109,6 @@ impl ProtocolHandler for Ping {
         // By calling `finish` on the send stream we signal that we will not send anything
         // further, which makes the receive stream on the other end terminate.
         send.finish()?;
-
-        // increment count of pings we've received
-        metrics.pings_recv.inc();
 
         // Wait until the remote closes the connection, which it does once it
         // received the response.
