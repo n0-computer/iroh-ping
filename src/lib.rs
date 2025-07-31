@@ -143,7 +143,7 @@ mod tests {
         let server_router = Router::builder(server_endpoint)
             .accept(ALPN, server_ping)
             .spawn();
-        let server_addr = server_router.endpoint().node_addr().initialized().await?;
+        let server_addr = server_router.endpoint().node_addr().initialized().await;
 
         let client_endpoint = Endpoint::builder().discovery_n0().bind().await?;
         let client_ping = Ping::new();
