@@ -17,3 +17,6 @@ n0-snafu = "0.2.1"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
+
+[patch.crates-io]
+iroh = { git = "https://github.com/n0-computer/iroh.git", branch = "main"}
