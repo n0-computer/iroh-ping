@@ -1,8 +1,3 @@
-# iroh ping
-
-A very simple iroh protocol for pinging a remote node. It's a high level example & easy starting point for new projects:
-
-```rust
 use anyhow::Result;
 use iroh::{protocol::Router, Endpoint, Watcher};
 use iroh_ping::Ping;
@@ -23,9 +18,3 @@ async fn main() -> Result<()> {
     println!("ping took: {:?} to complete", rtt);
     Ok(())
 }
-
-```
-
-## This is not the "real" ping
-
-Iroh has all sorts of internal ping-type messages, this is a high level demo of a protocol, and in no way necessary for iroh's normal operation.
