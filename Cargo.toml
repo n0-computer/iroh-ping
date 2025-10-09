@@ -11,8 +11,8 @@ rust-version = "1.85"
 
 [dependencies]
 anyhow = "1.0.98"
-iroh = "0.92"
-iroh-metrics = "0.35.0"
+iroh = "0.93"
+iroh-metrics = "0.36.0"
 n0-snafu = "0.2.2"
 
 [dev-dependencies]
