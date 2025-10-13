@@ -302,7 +302,7 @@
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use </span>anyhow::Result;
-    <span class="kw">use </span>iroh::{protocol::Router, Endpoint, Watcher};
+    <span class="kw">use </span>iroh::{protocol::Router, Endpoint};
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
@@ -314,7 +314,7 @@
         <span class="kw">let </span>server_router = Router::builder(server_endpoint)
             .accept(ALPN, server_ping)
             .spawn();
-        <span class="kw">let </span>server_addr = server_router.endpoint().node_addr().initialized().<span class="kw">await</span>;
+        <span class="kw">let </span>server_addr = server_router.endpoint().node_addr();
 
         <span class="kw">let </span>client_endpoint = Endpoint::builder().discovery_n0().bind().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>client_ping = Ping::new();
