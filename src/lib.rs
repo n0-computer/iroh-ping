@@ -6,7 +6,7 @@ use std::{
 use iroh::{
     endpoint::Connection,
     protocol::{AcceptError, ProtocolHandler},
-    Endpoint, NodeAddr,
+    Endpoint, EndpointAddr,
 };
 use iroh_metrics::{Counter, MetricsGroup};
 
@@ -48,7 +48,7 @@ impl Ping {
     }
 
     /// Sends a ping on the provided endpoint to a given node address.
-    pub async fn ping(&self, endpoint: &Endpoint, addr: NodeAddr) -> anyhow::Result<Duration> {
+    pub async fn ping(&self, endpoint: &Endpoint, addr: EndpointAddr) -> anyhow::Result<Duration> {
         // Open a connection to the accepting node
         let conn = endpoint.connect(addr, ALPN).await?;
 
@@ -88,7 +88,7 @@ impl ProtocolHandler for Ping {
         let metrics = self.metrics.clone();
 
         // We can get the remote's node id from the connection.
-        let node_id = connection.remote_node_id()?;
+        let node_id = connection.remote_id()?;
         println!("accepted connection from {node_id}");
 
         // Our protocol is a simple request-response protocol, so we expect the
@@ -137,15 +137,15 @@ mod tests {
 
     #[tokio::test]
     async fn test_ping() -> Result<()> {
-        let server_endpoint = Endpoint::builder().discovery_n0().bind().await?;
+        let server_endpoint = Endpoint::builder().bind().await?;
         let server_ping = Ping::new();
         let server_metrics = server_ping.metrics().clone();
         let server_router = Router::builder(server_endpoint)
             .accept(ALPN, server_ping)
             .spawn();
-        let server_addr = server_router.endpoint().node_addr();
+        let server_addr = server_router.endpoint().addr();
 
-        let client_endpoint = Endpoint::builder().discovery_n0().bind().await?;
+        let client_endpoint = Endpoint::builder().bind().await?;
         let client_ping = Ping::new();
         let client_metrics = client_ping.metrics().clone();
 

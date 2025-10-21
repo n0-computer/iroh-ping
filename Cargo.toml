@@ -11,12 +11,9 @@ rust-version = "1.85"
 
 [dependencies]
 anyhow = "1.0.98"
-iroh = "0.93"
+iroh = "0.94"
 iroh-metrics = "0.36.0"
 n0-snafu = "0.2.2"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
-
-[patch.crates-io]
-iroh = { git = "https://github.com/n0-computer/iroh.git", branch = "main" }
