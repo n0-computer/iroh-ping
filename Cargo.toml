@@ -11,9 +11,9 @@ rust-version = "1.85"
 
 [dependencies]
 anyhow = "1.0.98"
-iroh = "0.94"
-iroh-metrics = "0.36.0"
-n0-snafu = "0.2.2"
+iroh = "0.95"
+iroh-metrics = "0.37.0"
+n0-error = "0.1"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
