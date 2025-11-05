@@ -84,11 +84,11 @@ impl ProtocolHandler for Ping {
     ///
     /// The returned future runs on a newly spawned tokio task, so it can run as long as
     /// the connection lasts.
-    async fn accept(&self, connection: Connection) -> n0_snafu::Result<(), AcceptError> {
+    async fn accept(&self, connection: Connection) -> n0_error::Result<(), AcceptError> {
         let metrics = self.metrics.clone();
 
         // We can get the remote's node id from the connection.
-        let node_id = connection.remote_id()?;
+        let node_id = connection.remote_id();
         println!("accepted connection from {node_id}");
 
         // Our protocol is a simple request-response protocol, so we expect the
