@@ -84,11 +84,11 @@
 <a href=#84 id=84 data-nosnippet>84</a>    ///
 <a href=#85 id=85 data-nosnippet>85</a>    /// The returned future runs on a newly spawned tokio task, so it can run as long as
 <a href=#86 id=86 data-nosnippet>86</a>    /// the connection lasts.
-<a href=#87 id=87 data-nosnippet>87</a>    </span><span class="kw">async fn </span>accept(<span class="kw-2">&amp;</span><span class="self">self</span>, connection: Connection) -&gt; n0_snafu::Result&lt;(), AcceptError&gt; {
+<a href=#87 id=87 data-nosnippet>87</a>    </span><span class="kw">async fn </span>accept(<span class="kw-2">&amp;</span><span class="self">self</span>, connection: Connection) -&gt; n0_error::Result&lt;(), AcceptError&gt; {
 <a href=#88 id=88 data-nosnippet>88</a>        <span class="kw">let </span>metrics = <span class="self">self</span>.metrics.clone();
 <a href=#89 id=89 data-nosnippet>89</a>
 <a href=#90 id=90 data-nosnippet>90</a>        <span class="comment">// We can get the remote's node id from the connection.
-<a href=#91 id=91 data-nosnippet>91</a>        </span><span class="kw">let </span>node_id = connection.remote_id()<span class="question-mark">?</span>;
+<a href=#91 id=91 data-nosnippet>91</a>        </span><span class="kw">let </span>node_id = connection.remote_id();
 <a href=#92 id=92 data-nosnippet>92</a>        <span class="macro">println!</span>(<span class="string">"accepted connection from {node_id}"</span>);
 <a href=#93 id=93 data-nosnippet>93</a>
 <a href=#94 id=94 data-nosnippet>94</a>        <span class="comment">// Our protocol is a simple request-response protocol, so we expect the
