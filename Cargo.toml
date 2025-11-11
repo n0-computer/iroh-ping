@@ -19,3 +19,8 @@ n0-error = "0.1"
 iroh-tickets = "0.2"
 tokio = { version = "1", features = ["full"] }
 tracing-subscriber = "0.3"
+
+[patch.crates-io]
+iroh = { git = "https://github.com/n0-computer/iroh", branch = "feat-multipath" }
+# iroh-quinn = { git = "https://github.com/n0-computer/quinn", branch = "main-iroh" }
+iroh-quinn-udp = { git = "https://github.com/n0-computer/quinn", branch = "main-iroh" }
