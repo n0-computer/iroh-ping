@@ -7,7 +7,7 @@ use std::env;
 async fn run_receiver() -> Result<()> {
     // Create an endpoint, it allows creating and accepting
     // connections in the iroh p2p world
-    let endpoint = Endpoint::builder().bind().await?;
+    let endpoint = Endpoint::bind().await?;
 
     // bring the endpoint online before accepting connections
     endpoint.online().await;
@@ -20,7 +20,7 @@ async fn run_receiver() -> Result<()> {
     println!("{ticket}");
 
     // receiving ping requests
-    Router::builder(endpoint)
+    let router = Router::builder(endpoint)
         .accept(iroh_ping::ALPN, ping)
         .spawn();
 
@@ -33,7 +33,7 @@ async fn run_receiver() -> Result<()> {
 
 async fn run_sender(ticket: EndpointTicket) -> Result<()> {
     // create a send side & send a ping
-    let send_ep = Endpoint::builder().bind().await?;
+    let send_ep = Endpoint::bind().await?;
     let send_pinger = Ping::new();
     let rtt = send_pinger.ping(&send_ep, ticket.endpoint_addr().clone()).await?;
     println!("ping took: {:?} to complete", rtt);
@@ -42,6 +42,7 @@ async fn run_sender(ticket: EndpointTicket) -> Result<()> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    tracing_subscriber::fmt::init();
     let mut args = env::args().skip(1);
     let role = args
         .next()

@@ -915,6 +915,7 @@ dependencies = [
  "iroh-ping",
  "iroh-tickets",
  "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]
