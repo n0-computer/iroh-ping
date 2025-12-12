@@ -16,7 +16,7 @@
 //!
 //! Replace `<TICKET>` with the ticket printed by the receiver.
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use iroh::{Endpoint, protocol::Router};
 use iroh_ping::Ping;
 use iroh_tickets::{Ticket, endpoint::EndpointTicket};
@@ -51,7 +51,9 @@ async fn run_sender(ticket: EndpointTicket) -> Result<()> {
     // create a send side & send a ping
     let send_ep = Endpoint::bind().await?;
     let send_pinger = Ping::new();
-    let rtt = send_pinger.ping(&send_ep, ticket.endpoint_addr().clone()).await?;
+    let rtt = send_pinger
+        .ping(&send_ep, ticket.endpoint_addr().clone())
+        .await?;
     println!("ping took: {:?} to complete", rtt);
     Ok(())
 }
@@ -75,6 +77,9 @@ async fn main() -> Result<()> {
 
             run_sender(ticket).await
         }
-        _ => Err(anyhow!("unknown role '{}'; use 'receiver' or 'sender'", role)),
+        _ => Err(anyhow!(
+            "unknown role '{}'; use 'receiver' or 'sender'",
+            role
+        )),
     }
 }

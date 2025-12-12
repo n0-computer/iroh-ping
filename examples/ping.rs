@@ -1,5 +1,5 @@
 use anyhow::Result;
-use iroh::{protocol::Router, Endpoint};
+use iroh::{Endpoint, protocol::Router};
 use iroh_ping::Ping;
 
 #[tokio::main]
