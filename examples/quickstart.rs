@@ -27,7 +27,7 @@ async fn run_receiver() -> Result<()> {
     // connections in the iroh p2p world
     let endpoint = Endpoint::bind().await?;
 
-    // bring the endpoint online before accepting connections
+    // Wait for the endpoint to be accessible by others on the internet
     endpoint.online().await;
 
     // Then we initialize a struct that can accept ping requests over iroh connections
@@ -42,11 +42,9 @@ async fn run_receiver() -> Result<()> {
         .accept(iroh_ping::ALPN, ping)
         .spawn();
 
-    // Keep the receiver running indefinitely
-    loop {
-        tokio::time::sleep(tokio::time::Duration::from_secs(60)).await;
-    }
-
+    // Keep the receiver running until Ctrl+C
+    tokio::signal::ctrl_c().await?;
+    Ok(())
 }
 
 async fn run_sender(ticket: EndpointTicket) -> Result<()> {
