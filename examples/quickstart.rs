@@ -1,3 +1,21 @@
+//! # Iroh Ping Quickstart Example
+//!
+//! This example demonstrates how to use iroh-ping to send ping requests between two endpoints.
+//!
+//! ## Usage
+//!
+//! First, start the receiver in one terminal:
+//! ```sh
+//! cargo run --example quickstart receiver
+//! ```
+//!
+//! The receiver will print a ticket. Copy this ticket, then in another terminal run:
+//! ```sh
+//! cargo run --example quickstart sender <TICKET>
+//! ```
+//!
+//! Replace `<TICKET>` with the ticket printed by the receiver.
+
 use anyhow::{anyhow, Result};
 use iroh::{Endpoint, protocol::Router};
 use iroh_ping::Ping;
