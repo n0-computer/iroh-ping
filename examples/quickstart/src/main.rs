@@ -20,7 +20,7 @@ async fn run_receiver() -> Result<()> {
     println!("{ticket}");
 
     // receiving ping requests
-    let router = Router::builder(endpoint)
+    let _router = Router::builder(endpoint)
         .accept(iroh_ping::ALPN, ping)
         .spawn();
 
