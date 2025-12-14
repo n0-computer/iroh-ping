@@ -1,30 +1,26 @@
 # iroh ping
 
-A very simple iroh protocol for pinging a remote node. It's a high level example & easy starting point for new projects:
+A very simple iroh protocol for pinging a remote node. It's a high level example & easy starting point for new projects.
 
-```rust
-use anyhow::Result;
-use iroh::{protocol::Router, Endpoint, Watcher};
-use iroh_ping::Ping;
+Walk through the quickstart example in the [Documentation Website](https://docs.iroh.computer/quickstart).
 
-#[tokio::main]
-async fn main() -> Result<()> {
-    // create the receive side
-    let recv_ep = Endpoint::builder().discovery_n0().bind().await?;
-    let recv_router = Router::builder(recv_ep)
-        .accept(iroh_ping::ALPN, Ping::new())
-        .spawn();
-    let addr = recv_router.endpoint().node_addr().initialized().await;
+## Running the Examples
 
-    // create a send side & send a ping
-    let send_ep = Endpoint::builder().discovery_n0().bind().await?;
-    let send_pinger = Ping::new();
-    let rtt = send_pinger.ping(&send_ep, addr).await?;
-    println!("ping took: {:?} to complete", rtt);
-    Ok(())
-}
+### Quickstart Example
 
+This example demonstrates basic ping functionality between two endpoints.
+
+First, start the receiver in one terminal:
+```sh
+cargo run --example quickstart receiver
 ```
+
+The receiver will print a ticket. Copy this ticket, then in another terminal run:
+```sh
+cargo run --example quickstart sender <TICKET>
+```
+
+Replace `<TICKET>` with the ticket printed by the receiver.
 
 ## This is not the "real" ping
 

@@ -4,9 +4,9 @@ use std::{
 };
 
 use iroh::{
+    Endpoint, EndpointAddr,
     endpoint::Connection,
     protocol::{AcceptError, ProtocolHandler},
-    Endpoint, EndpointAddr,
 };
 use iroh_metrics::{Counter, MetricsGroup};
 
@@ -131,7 +131,7 @@ pub struct Metrics {
 #[cfg(test)]
 mod tests {
     use anyhow::Result;
-    use iroh::{protocol::Router, Endpoint};
+    use iroh::{Endpoint, protocol::Router};
 
     use super::*;
 

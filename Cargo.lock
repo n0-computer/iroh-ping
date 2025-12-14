@@ -1382,8 +1382,10 @@ dependencies = [
  "anyhow",
  "iroh",
  "iroh-metrics",
+ "iroh-tickets",
  "n0-error",
  "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -1485,6 +1487,20 @@ dependencies = [
  "webpki-roots",
  "ws_stream_wasm",
  "z32",
+]
+
+[[package]]
+name = "iroh-tickets"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a322053cacddeca222f0999ce3cf6aa45c64ae5ad8c8911eac9b66008ffbaa5"
+dependencies = [
+ "data-encoding",
+ "derive_more 2.0.1",
+ "iroh-base",
+ "n0-error",
+ "postcard",
+ "serde",
 ]
 
 [[package]]
