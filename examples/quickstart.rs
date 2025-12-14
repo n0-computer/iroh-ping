@@ -16,11 +16,12 @@
 //!
 //! Replace `<TICKET>` with the ticket printed by the receiver.
 
+use std::env;
+
 use anyhow::{Result, anyhow};
 use iroh::{Endpoint, protocol::Router};
 use iroh_ping::Ping;
 use iroh_tickets::{Ticket, endpoint::EndpointTicket};
-use std::env;
 
 async fn run_receiver() -> Result<()> {
     // Create an endpoint, it allows creating and accepting
