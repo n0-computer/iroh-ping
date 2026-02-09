@@ -4,9 +4,9 @@
 <a href=#4 id=4 data-nosnippet>4</a>};
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>iroh::{
-<a href=#7 id=7 data-nosnippet>7</a>    endpoint::Connection,
-<a href=#8 id=8 data-nosnippet>8</a>    protocol::{AcceptError, ProtocolHandler},
-<a href=#9 id=9 data-nosnippet>9</a>    Endpoint, EndpointAddr,
+<a href=#7 id=7 data-nosnippet>7</a>    Endpoint, EndpointAddr,
+<a href=#8 id=8 data-nosnippet>8</a>    endpoint::Connection,
+<a href=#9 id=9 data-nosnippet>9</a>    protocol::{AcceptError, ProtocolHandler},
 <a href=#10 id=10 data-nosnippet>10</a>};
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>iroh_metrics::{Counter, MetricsGroup};
 <a href=#12 id=12 data-nosnippet>12</a>
@@ -131,7 +131,7 @@
 <a href=#131 id=131 data-nosnippet>131</a><span class="attr">#[cfg(test)]
 <a href=#132 id=132 data-nosnippet>132</a></span><span class="kw">mod </span>tests {
 <a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">use </span>anyhow::Result;
-<a href=#134 id=134 data-nosnippet>134</a>    <span class="kw">use </span>iroh::{protocol::Router, Endpoint};
+<a href=#134 id=134 data-nosnippet>134</a>    <span class="kw">use </span>iroh::{Endpoint, protocol::Router};
 <a href=#135 id=135 data-nosnippet>135</a>
 <a href=#136 id=136 data-nosnippet>136</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#137 id=137 data-nosnippet>137</a>
