@@ -131,13 +131,14 @@ pub struct Metrics {
 #[cfg(test)]
 mod tests {
     use anyhow::Result;
+    use iroh::endpoint::presets;
     use iroh::{Endpoint, protocol::Router};
 
     use super::*;
 
     #[tokio::test]
     async fn test_ping() -> Result<()> {
-        let server_endpoint = Endpoint::builder().bind().await?;
+        let server_endpoint = Endpoint::bind(presets::N0).await?;
         let server_ping = Ping::new();
         let server_metrics = server_ping.metrics().clone();
         let server_router = Router::builder(server_endpoint)
@@ -145,7 +146,7 @@ mod tests {
             .spawn();
         let server_addr = server_router.endpoint().addr();
 
-        let client_endpoint = Endpoint::builder().bind().await?;
+        let client_endpoint = Endpoint::bind(presets::N0).await?;
         let client_ping = Ping::new();
         let client_metrics = client_ping.metrics().clone();
 

@@ -19,6 +19,7 @@
 use std::env;
 
 use anyhow::{Result, anyhow};
+use iroh::endpoint::presets;
 use iroh::{Endpoint, protocol::Router};
 use iroh_ping::Ping;
 use iroh_tickets::{Ticket, endpoint::EndpointTicket};
@@ -26,7 +27,7 @@ use iroh_tickets::{Ticket, endpoint::EndpointTicket};
 async fn run_receiver() -> Result<()> {
     // Create an endpoint, it allows creating and accepting
     // connections in the iroh p2p world
-    let endpoint = Endpoint::bind().await?;
+    let endpoint = Endpoint::bind(presets::N0).await?;
 
     // Wait for the endpoint to be accessible by others on the internet
     endpoint.online().await;
@@ -50,7 +51,7 @@ async fn run_receiver() -> Result<()> {
 
 async fn run_sender(ticket: EndpointTicket) -> Result<()> {
     // create a send side & send a ping
-    let send_ep = Endpoint::bind().await?;
+    let send_ep = Endpoint::bind(presets::N0).await?;
     let send_pinger = Ping::new();
     let rtt = send_pinger
         .ping(&send_ep, ticket.endpoint_addr().clone())
