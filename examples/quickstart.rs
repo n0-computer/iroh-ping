@@ -19,8 +19,7 @@
 use std::env;
 
 use anyhow::{Result, anyhow};
-use iroh::endpoint::presets;
-use iroh::{Endpoint, protocol::Router};
+use iroh::{Endpoint, endpoint::presets, protocol::Router};
 use iroh_ping::Ping;
 use iroh_tickets::{Ticket, endpoint::EndpointTicket};
 

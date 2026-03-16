@@ -131,8 +131,7 @@ pub struct Metrics {
 #[cfg(test)]
 mod tests {
     use anyhow::Result;
-    use iroh::endpoint::presets;
-    use iroh::{Endpoint, protocol::Router};
+    use iroh::{Endpoint, endpoint::presets, protocol::Router};
 
     use super::*;
 
