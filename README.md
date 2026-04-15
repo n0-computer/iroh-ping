@@ -22,6 +22,17 @@ cargo run --example quickstart sender <TICKET>
 
 Replace `<TICKET>` with the ticket printed by the receiver.
 
+### Optional: push metrics to iroh-services
+
+If the `IROH_SERVICES_API_SECRET` environment variable is set, the receiver will register with [iroh-services](https://services.iroh.computer) and push endpoint metrics in the background. If it isn't set, the example prints a notice and continues without it.
+
+```sh
+export IROH_SERVICES_API_SECRET=<your-api-key>
+cargo run --example quickstart receiver
+```
+
+Get a free API key at [services.iroh.computer](https://services.iroh.computer).
+
 ## This is not the "real" ping
 
 Iroh has all sorts of internal ping-type messages, this is a high level demo of a protocol, and in no way necessary for iroh's normal operation.
