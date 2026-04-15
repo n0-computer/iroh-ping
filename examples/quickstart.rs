@@ -78,6 +78,7 @@ async fn run_sender(ticket: EndpointTicket) -> Result<()> {
         .ping(&send_ep, ticket.endpoint_addr().clone())
         .await?;
     println!("ping took: {:?} to complete", rtt);
+    send_ep.close().await;
     Ok(())
 }
 
