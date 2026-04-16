@@ -31,6 +31,28 @@ async fn run_receiver() -> Result<()> {
     // Wait for the endpoint to be accessible by others on the internet
     endpoint.online().await;
 
+    // Optionally push endpoint metrics to iroh-services if an API secret is
+    // available. Keep the client bound for the lifetime of the receiver so it
+    // continues reporting in the background.
+    let _services_client = match env::var("IROH_SERVICES_API_SECRET") {
+        Ok(_) => {
+            let client = iroh_services::Client::builder(&endpoint)
+                .api_secret_from_env()?
+                .name("iroh-ping-quickstart")?
+                .build()
+                .await?;
+            println!("registered with iroh-services, pushing endpoint metrics");
+            Some(client)
+        }
+        Err(_) => {
+            println!(
+                "IROH_SERVICES_API_SECRET not set, skipping iroh-services setup. \
+                 Get a free API key at https://services.iroh.computer to see endpoint metrics and debug connectivity issues."
+            );
+            None
+        }
+    };
+
     // Then we initialize a struct that can accept ping requests over iroh connections
     let ping = Ping::new();
 
@@ -56,6 +78,7 @@ async fn run_sender(ticket: EndpointTicket) -> Result<()> {
         .ping(&send_ep, ticket.endpoint_addr().clone())
         .await?;
     println!("ping took: {:?} to complete", rtt);
+    send_ep.close().await;
     Ok(())
 }
 
