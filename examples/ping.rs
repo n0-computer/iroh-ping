@@ -17,5 +17,9 @@ async fn main() -> Result<()> {
     let send_pinger = Ping::new();
     let rtt = send_pinger.ping(&send_ep, addr).await?;
     println!("ping took: {rtt:?} to complete");
+
+    send_ep.close().await;
+    recv_ep.close().await;
+
     Ok(())
 }

@@ -67,6 +67,7 @@ async fn run_receiver() -> Result<()> {
 
     // Keep the receiver running until Ctrl+C
     tokio::signal::ctrl_c().await?;
+
     Ok(())
 }
 
