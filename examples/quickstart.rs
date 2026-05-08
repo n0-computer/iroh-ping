@@ -97,7 +97,7 @@ async fn main() -> Result<()> {
             let ticket_str = args
                 .next()
                 .ok_or_else(|| anyhow!("expected ticket as the second argument"))?;
-            let ticket = EndpointTicket::deserialize(&ticket_str)
+            let ticket = EndpointTicket::decode_string(&ticket_str)
                 .map_err(|e| anyhow!("failed to parse ticket: {}", e))?;
 
             run_sender(ticket).await
