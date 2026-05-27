@@ -7,16 +7,16 @@ license = "MIT OR Apache-2.0"
 authors = ["n0 team"]
 repository = "https://github.com/n0-computer/iroh-ping"
 keywords = ["iroh", "protocol"]
-rust-version = "1.89"
+rust-version = "1.91"
 
 [dependencies]
 anyhow = "1.0"
-iroh = "0.98"
-iroh-metrics = "0.38"
-n0-error = "0.1.3"
+iroh = "=1.0.0-rc.0"
+iroh-metrics = "=1.0.0-rc.0"
+n0-error = "=1.0.0-rc.0"
 
 [dev-dependencies]
-iroh-services = "0.14"
-iroh-tickets = "0.5"
+iroh-services = "=1.0.0-rc.0"
+iroh-tickets = "=1.0.0-rc.0"
 tokio = { version = "1", features = ["full"] }
 tracing-subscriber = "0.3"
