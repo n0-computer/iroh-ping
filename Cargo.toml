@@ -16,10 +16,7 @@ iroh-metrics = "=1.0.0-rc.0"
 n0-error = "=1.0.0-rc.0"
 
 [dev-dependencies]
-iroh-services = "0.14"
+iroh-services = "=1.0.0-rc.0"
 iroh-tickets = "=1.0.0-rc.0"
 tokio = { version = "1", features = ["full"] }
 tracing-subscriber = "0.3"
-
-[patch.crates-io]
-iroh-services = { git = "https://github.com/n0-computer/iroh-services", branch = "update-1-0-rc-0" }
