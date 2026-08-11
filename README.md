@@ -30,6 +30,14 @@ cargo run --example quickstart sender <TICKET>
 
 Replace `<TICKET>` with the ticket printed by the receiver.
 
+### Measuring the data rate
+
+Pass `--flood` to the sender to follow the ping with a stream of bytes, printing the data rate every second until you stop it with Ctrl+C:
+
+```sh
+cargo run --example quickstart sender --flood <TICKET>
+```
+
 ### Optional: push metrics to iroh-services
 
 If the `IROH_SERVICES_API_SECRET` environment variable is set, the receiver will register with [iroh-services](https://services.iroh.computer) and push endpoint metrics in the background. If it isn't set, the example prints a notice and continues without it.
