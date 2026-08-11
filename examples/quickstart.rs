@@ -35,10 +35,11 @@ use iroh_tickets::{Ticket, endpoint::EndpointTicket};
 async fn run_receiver() -> Result<()> {
     // Create an endpoint, it allows creating and accepting
     // connections in the iroh p2p world
-    let preset = iroh_services::preset().build()?;
+    let preset = iroh_services::preset().api_secret_from_env()?.build()?;
 
     // Wait for the endpoint to be accessible by others on the internet
     let endpoint = Endpoint::bind(preset.clone()).await?;
+    println!("endpoint id: {}", endpoint.id());
     endpoint.online().await;
 
     // continues reporting in the background.
@@ -68,10 +69,11 @@ async fn run_receiver() -> Result<()> {
 
 async fn run_sender(ticket: EndpointTicket, flood: bool) -> Result<()> {
     // create a send side & send a ping
-    let preset = iroh_services::preset().build()?;
+    let preset = iroh_services::preset().api_secret_from_env()?.build()?;
 
     // Wait for the endpoint to be accessible by others on the internet
     let endpoint = Endpoint::bind(preset.clone()).await?;
+    println!("endpoint id: {}", endpoint.id());
 
     endpoint.online().await;
     // continues reporting in the background.
