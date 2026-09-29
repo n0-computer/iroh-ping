@@ -1,0 +1,46 @@
+# Copy to swarm.local.toml for your project settings (that file is gitignored).
+# All devices use this project's API key, read from the environment by default.
+api_key_env = "IROH_SERVICES_API_SECRET"
+# Alternatively: api_key = "your-project-api-key"
+# Empty means authenticated public n0 relays; otherwise only these relays are used.
+relays = []
+# relays = ["https://your-custom-relay.example.com"]
+# Saved device identities, relative to this config file. Reused on every run.
+identity_dir = ".swarm-identities"
+metrics_interval_secs = 60
+# Run for five minutes after startup; 0 runs until Ctrl+C.
+duration_secs = 300
+
+[[swarms]]
+name = "dev"
+group = "dev"
+nodes = 3
+# Every node broadcasts via gossip, then pings/floods a live gossip neighbor.
+flood_secs = 1
+pause_secs = 4
+[swarms.attributes]
+environment = "dev"
+app_version = "2.0.0-dev"
+region = "local"
+
+[[swarms]]
+name = "prod-a"
+group = "prod"
+nodes = 2
+flood_secs = 3
+pause_secs = 2
+[swarms.attributes]
+environment = "prod"
+app_version = "1.4.0"
+region = "local"
+
+[[swarms]]
+name = "prod-b"
+group = "prod"
+nodes = 3
+flood_secs = 3
+pause_secs = 2
+[swarms.attributes]
+environment = "prod"
+app_version = "1.5.0"
+region = "local"

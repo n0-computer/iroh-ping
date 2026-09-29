@@ -1,1 +1,4 @@
 /target
+
+/swarm.local.toml
+/.swarm-identities/

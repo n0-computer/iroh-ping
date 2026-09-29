@@ -175,8 +175,8 @@ impl ProtocolHandler for Ping {
                 // normal way for an open-ended flood to end.
                 while let Ok(Some(n)) = recv.read(&mut buf).await {
                     recvd += n as u64;
+                    metrics.bytes_recv.inc_by(n as u64);
                 }
-                metrics.bytes_recv.inc_by(recvd);
 
                 // Best effort: there may be nobody left to hear the report.
                 let _ = send.write_all(&recvd.to_le_bytes()).await;
